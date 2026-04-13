@@ -1,0 +1,17 @@
+{
+  "name": "tuition-manager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run install:all",
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently -k -n api,web -c green,blue \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "migrate": "npm --prefix backend run migrate",
+    "build": "npm --prefix frontend run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
