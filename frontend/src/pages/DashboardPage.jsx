@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiRequest } from '../utils/api';
+import { apiRequest } from '../api/api';
 import AppShell from '../components/AppShell.jsx';
 import StudentBatchPanel from '../components/StudentBatchPanel.jsx';
 import TeacherBatchPanel from '../components/TeacherBatchPanel.jsx';
