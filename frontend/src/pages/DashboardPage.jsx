@@ -18,12 +18,30 @@ export default function DashboardPage() {
   return (
     <AppShell>
 
-      {/* ✅ DASHBOARD STATS */}
+      {/* 🔥 DASHBOARD STATS (PRO UI) */}
       {stats && (
-        <div style={{ display: 'flex', gap: 20, marginBottom: 20 }}>
-          <div>👥 Students: {stats.totalStudents}</div>
-          <div>👨‍🏫 Teachers: {stats.totalTeachers}</div>
-          <div>💰 Fees: ₹{stats.totalFees}</div>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
+            marginBottom: '1.5rem'
+          }}
+        >
+          <div className="card">
+            <p className="eyebrow">Students</p>
+            <h2>{stats.totalStudents}</h2>
+          </div>
+
+          <div className="card">
+            <p className="eyebrow">Teachers</p>
+            <h2>{stats.totalTeachers}</h2>
+          </div>
+
+          <div className="card">
+            <p className="eyebrow">Total Fees</p>
+            <h2>₹{stats.totalFees}</h2>
+          </div>
         </div>
       )}
 
