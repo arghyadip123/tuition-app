@@ -1,3 +1,4 @@
+import dashboardRoutes from './routes/dashboardRoutes.js';
 import cors from 'cors';
 import express from 'express';
 import env from './config/env.js';
@@ -30,6 +31,7 @@ app.use('/api/batches', batchRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/attendance', attendanceRoutes);
 app.use('/api/fees', feeRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
