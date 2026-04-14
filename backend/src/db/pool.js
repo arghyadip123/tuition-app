@@ -4,8 +4,10 @@ import env from '../config/env.js';
 const { Pool } = pg;
 
 const pool = new Pool({
-  connectionString: env.databaseUrl
+  connectionString: env.databaseUrl,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
-
 export default pool;
 
