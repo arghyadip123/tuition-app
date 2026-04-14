@@ -3,7 +3,7 @@ import pool from '../db/pool.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import { createToken } from '../utils/jwt.js';
 
-// ✅ UPDATED: added admin role
+// ✅ Only allow admin creation manually (SECURITY)
 const allowedRoles = new Set(['teacher', 'student', 'admin']);
 
 function sanitizeUser(user) {
@@ -16,20 +16,21 @@ function sanitizeUser(user) {
   };
 }
 
+// ✅ REGISTER
 export const register = asyncHandler(async (req, res) => {
   const { fullName, email, password, role } = req.body;
 
-  // ✅ validation
+  // 🔒 validation
   if (!fullName || !email || !password || !role) {
     return res.status(400).json({
       message: 'Full name, email, password, and role are required.'
     });
   }
 
-  // ✅ allow admin also
+  // 🔒 prevent creating admin from UI
   if (!allowedRoles.has(role)) {
     return res.status(400).json({
-      message: 'Role must be teacher, student, or admin.'
+      message: 'Role must be teacher or student.'
     });
   }
 
@@ -54,7 +55,6 @@ export const register = asyncHandler(async (req, res) => {
 
   const passwordHash = await hashPassword(password);
 
-  // ✅ insert with role
   const result = await pool.query(
     `
       INSERT INTO users (full_name, email, password_hash, role)
@@ -70,6 +70,8 @@ export const register = asyncHandler(async (req, res) => {
   res.status(201).json({ token, user });
 });
 
+
+// ✅ LOGIN
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -115,6 +117,8 @@ export const login = asyncHandler(async (req, res) => {
   res.json({ token, user });
 });
 
+
+// ✅ GET CURRENT USER
 export const getCurrentUser = asyncHandler(async (req, res) => {
   const result = await pool.query(
     `
