@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { apiRequest } from '../utils/api';
-
+import { apiRequest } from '../api/api';
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(false);
 
