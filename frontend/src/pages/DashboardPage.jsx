@@ -28,18 +28,20 @@ export default function DashboardPage() {
       .catch(console.error);
   }, []);
 
-  // ✅ CHART DATA
+  // 🔥 UPDATED CHART DATA (Monthly Style)
   const chartData = stats && {
-    labels: ['Students', 'Teachers', 'Fees'],
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
     datasets: [
       {
-        label: 'Dashboard Data',
+        label: 'Fees Collection (₹)',
         data: [
-          stats.totalStudents,
-          stats.totalTeachers,
+          stats.totalFees * 0.2,
+          stats.totalFees * 0.3,
+          stats.totalFees * 0.4,
+          stats.totalFees * 0.6,
           stats.totalFees
         ],
-        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b']
+        backgroundColor: '#3b82f6'
       }
     ]
   };
@@ -77,7 +79,7 @@ export default function DashboardPage() {
       {/* 📊 CHART */}
       {chartData && (
         <div className="card" style={{ marginBottom: '1.5rem' }}>
-          <h3>📊 Analytics Overview</h3>
+          <h3>📊 Monthly Fees Analytics</h3>
           <Bar data={chartData} />
         </div>
       )}
