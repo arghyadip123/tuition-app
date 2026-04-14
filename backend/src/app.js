@@ -12,7 +12,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: env.clientOrigin
+    origin: [
+      'http://localhost:5173',
+      'https://tuition-app-chi.vercel.app'
+    ],
+    credentials: true
   })
 );
 app.use(express.json());
