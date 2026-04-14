@@ -1,82 +1,61 @@
 import { useState } from 'react';
-import { apiRequest } from '../api/client';
+import { Navigate } from 'react-router-dom';
+import AuthForm from '../components/AuthForm.jsx';
+import { useAuth } from '../hooks/useAuth.js';
+
 export default function AuthPage() {
-  const [isLogin, setIsLogin] = useState(false);
+  const { isAuthenticated, isLoading, login, register } = useAuth();
+  const [mode, setMode] = useState('login');
+  const [error, setError] = useState('');
+  const [pending, setPending] = useState(false);
 
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('student');
+  if (isLoading) {
+    return <div className="page-loader">Preparing...</div>;
+  }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
-    const endpoint = isLogin ? '/auth/login' : '/auth/register';
-
-    const payload = isLogin
-      ? { email, password }
-      : { fullName, email, password, role };
+  async function handleSubmit(formState) {
+    setPending(true);
+    setError('');
 
     try {
-      const res = await apiRequest(endpoint, {
-        method: 'POST',
-        body: JSON.stringify(payload)
-      });
-
-      console.log(res);
-      alert('Success!');
+      if (mode === 'login') {
+        await login(formState);
+      } else {
+        await register(formState);
+      }
     } catch (err) {
-      console.error(err);
-      alert('Error occurred');
+      setError(err.message);
+    } finally {
+      setPending(false);
     }
-  };
+  }
 
   return (
-    <div>
-      <h2>{isLogin ? 'Login' : 'Register'}</h2>
+    <div className="auth-page">
+      <section className="auth-panel">
 
-      <form onSubmit={handleSubmit}>
-        
-        {!isLogin && (
-          <>
-            <input
-              type="text"
-              placeholder="Full Name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
+        <div className="auth-toggle">
+          <button onClick={() => setMode('login')}>
+            Login
+          </button>
 
-            {/* ✅ ROLE DROPDOWN (UPDATED) */}
-            <select value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="teacher">Teacher</option>
-              <option value="student">Student</option>
-              <option value="admin">Admin 👑</option>
-            </select>
-          </>
-        )}
+          <button onClick={() => setMode('register')}>
+            Register
+          </button>
+        </div>
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+        <AuthForm
+          error={error}
+          mode={mode}
+          onSubmit={handleSubmit}
+          pending={pending}
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button type="submit">
-          {isLogin ? 'Login' : 'Register'}
-        </button>
-      </form>
-
-      <button onClick={() => setIsLogin(!isLogin)}>
-        Switch to {isLogin ? 'Register' : 'Login'}
-      </button>
+      </section>
     </div>
   );
 }
