@@ -33,11 +33,18 @@ export default function AuthForm({ error, mode, onSubmit, pending }) {
   return (
     <form className="card auth-form" onSubmit={handleSubmit}>
       <div className="section-heading">
-        <p className="eyebrow">{mode === 'login' ? 'Welcome back' : 'Create your account'}</p>
-        <h2>{mode === 'login' ? 'Sign in to continue' : 'Start your tuition workspace'}</h2>
+        <p className="eyebrow">
+          {mode === 'login' ? 'Welcome back' : 'Create your account'}
+        </p>
+        <h2>
+          {mode === 'login'
+            ? 'Sign in to continue'
+            : 'Start your tuition workspace'}
+        </h2>
       </div>
 
-      {mode === 'register' ? (
+      {/* FULL NAME */}
+      {mode === 'register' && (
         <label className="field">
           <span>Full name</span>
           <input
@@ -48,8 +55,9 @@ export default function AuthForm({ error, mode, onSubmit, pending }) {
             value={formState.fullName}
           />
         </label>
-      ) : null}
+      )}
 
+      {/* EMAIL */}
       <label className="field">
         <span>Email address</span>
         <input
@@ -62,6 +70,7 @@ export default function AuthForm({ error, mode, onSubmit, pending }) {
         />
       </label>
 
+      {/* PASSWORD */}
       <label className="field">
         <span>Password</span>
         <input
@@ -75,22 +84,29 @@ export default function AuthForm({ error, mode, onSubmit, pending }) {
         />
       </label>
 
-      {mode === 'register' ? (
+      {/* 🔥 UPDATED ROLE DROPDOWN */}
+      {mode === 'register' && (
         <label className="field">
           <span>Role</span>
           <select name="role" onChange={updateField} value={formState.role}>
             <option value="teacher">Teacher</option>
             <option value="student">Student</option>
+            <option value="admin">Admin 👑</option> {/* ✅ ADDED */}
           </select>
         </label>
-      ) : null}
+      )}
 
+      {/* ERROR */}
       {error ? <p className="feedback error">{error}</p> : null}
 
+      {/* BUTTON */}
       <button className="primary-button" disabled={pending} type="submit">
-        {pending ? 'Please wait...' : mode === 'login' ? 'Login' : 'Create account'}
+        {pending
+          ? 'Please wait...'
+          : mode === 'login'
+          ? 'Login'
+          : 'Create account'}
       </button>
     </form>
   );
 }
-
