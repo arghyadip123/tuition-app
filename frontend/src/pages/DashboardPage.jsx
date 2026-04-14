@@ -5,6 +5,19 @@ import StudentBatchPanel from '../components/StudentBatchPanel.jsx';
 import TeacherBatchPanel from '../components/TeacherBatchPanel.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 
+// ✅ CHART IMPORTS
+import { Bar } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
 export default function DashboardPage() {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
@@ -15,10 +28,26 @@ export default function DashboardPage() {
       .catch(console.error);
   }, []);
 
+  // ✅ CHART DATA
+  const chartData = stats && {
+    labels: ['Students', 'Teachers', 'Fees'],
+    datasets: [
+      {
+        label: 'Dashboard Data',
+        data: [
+          stats.totalStudents,
+          stats.totalTeachers,
+          stats.totalFees
+        ],
+        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b']
+      }
+    ]
+  };
+
   return (
     <AppShell>
 
-      {/* 🔥 DASHBOARD STATS (PRO UI) */}
+      {/* 🔥 DASHBOARD STATS */}
       {stats && (
         <div
           style={{
@@ -42,6 +71,14 @@ export default function DashboardPage() {
             <p className="eyebrow">Total Fees</p>
             <h2>₹{stats.totalFees}</h2>
           </div>
+        </div>
+      )}
+
+      {/* 📊 CHART */}
+      {chartData && (
+        <div className="card" style={{ marginBottom: '1.5rem' }}>
+          <h3>📊 Analytics Overview</h3>
+          <Bar data={chartData} />
         </div>
       )}
 
